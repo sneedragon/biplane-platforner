@@ -1,0 +1,41 @@
+[gd_scene load_steps=6 format=3 uid="uid://c1mur418tlp0k"]
+
+[ext_resource type="PackedScene" uid="uid://b7781jsaryfkf" path="res://scenes/gameplay/player.tscn" id="1_aik1q"]
+[ext_resource type="Script" path="res://scenes/levels/camera_2d.gd" id="1_myqux"]
+[ext_resource type="PackedScene" uid="uid://bg7iwu6g0577n" path="res://scenes/gameplay/plane.tscn" id="2_kpde2"]
+
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_14cjw"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_3cbal"]
+radius = 16.0
+
+[node name="Main" type="Node2D"]
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(256, 144)
+script = ExtResource("1_myqux")
+
+[node name="Player" parent="." instance=ExtResource("1_aik1q")]
+position = Vector2(128, 216)
+collision_mask = 129
+
+[node name="StaticBody2D" type="StaticBody2D" parent="."]
+position = Vector2(88, 256)
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D"]
+shape = SubResource("WorldBoundaryShape2D_14cjw")
+
+[node name="Plane" parent="." instance=ExtResource("2_kpde2")]
+position = Vector2(208, 220)
+collision_mask = 129
+
+[node name="Area2D2" type="Area2D" parent="Plane"]
+collision_layer = 128
+collision_mask = 130
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Plane/Area2D2"]
+position = Vector2(0, 4)
+shape = SubResource("CircleShape2D_3cbal")
+
+[connection signal="area_entered" from="Plane/Area2D2" to="Player" method="_on_area_2d_2_area_entered"]
